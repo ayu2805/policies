@@ -9,7 +9,7 @@ curl -sS https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox
 
 On Windows, run the command:
 ```powershell
-irm https://raw.githubusercontent.com/ayu2805/policies/main/firefox_policies.ps1 | iex
+irm https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_policies.ps1 | iex
 ```
 
 ### Google Chrome:
@@ -21,5 +21,17 @@ curl -sS https://raw.githubusercontent.com/ayu2805/policies/main/chrome/chrome_p
 
 On Windows, run the command:
 ```powershell
-irm https://raw.githubusercontent.com/ayu2805/policies/main/chrome_policies.ps1 | iex
+irm https://raw.githubusercontent.com/ayu2805/policies/main/chrome/chrome_policies.ps1 | iex
+```
+
+### Mozilla Thunderbird:
+
+On Linux, run the command:
+```bash
+curl -sS https://raw.githubusercontent.com/ayu2805/policies/main/thunderbird/thunderbird_policies.sh | sh
+```
+
+On Windows, run the command:
+```powershell
+irm https://raw.githubusercontent.com/ayu2805/policies/main/thunderbird/thunderbird_policies.ps1 | iex
 ```
