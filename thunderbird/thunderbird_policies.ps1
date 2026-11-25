@@ -1,13 +1,22 @@
 $ProgressPreference = "SilentlyContinue"
-$FirefoxInstallationPath = (Get-Item 'HKLM:\SOFTWARE\Mozilla\Thunderbird\TaskBarIDs').GetValueNames() | Select-Object -First 1
 
-$FirefoxPolicyPath = "HKLM:\SOFTWARE\Policies\Mozilla\Thunderbird"
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 
-New-Item -Path $FirefoxPolicyPath -Force | Out-Null
+if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Script is not running with administrative privileges." -ForegroundColor Red
+    Write-Host "Please run PowerShell as Administrator." -ForegroundColor Yellow
+    return
+}
 
-function Set-FirefoxPolicy {
+$ThunderbirdInstallationPath = (Get-Item 'HKLM:\SOFTWARE\Mozilla\Thunderbird\TaskBarIDs').GetValueNames() | Select-Object -First 1
+
+$ThunderbirdPolicyPath = "HKLM:\SOFTWARE\Policies\Mozilla\Thunderbird"
+
+New-Item -Path $ThunderbirdPolicyPath -Force | Out-Null
+
+function Set-ThunderbirdPolicy {
     param (
-        [string]$Path = $FirefoxPolicyPath,
+        [string]$Path = $ThunderbirdPolicyPath,
 
         [Parameter(Mandatory)]
         [string]$Name,
@@ -37,26 +46,26 @@ function Set-FirefoxPolicy {
         -Force | Out-Null
 }
 
-$Cookies= Join-Path $FirefoxPolicyPath "Cookies"
+$Cookies= Join-Path $ThunderbirdPolicyPath "Cookies"
 New-Item -Path $Cookies -Force | Out-Null
-Set-FirefoxPolicy -Path $Cookies -Name "AcceptThirdParty" -Value "never"
-Set-FirefoxPolicy -Path $Cookies -Name "Default" -Value 0
-Set-FirefoxPolicy -Path $Cookies -Name "Locked" -Value 1
+Set-ThunderbirdPolicy -Path $Cookies -Name "AcceptThirdParty" -Value "never"
+Set-ThunderbirdPolicy -Path $Cookies -Name "Default" -Value 0
+Set-ThunderbirdPolicy -Path $Cookies -Name "Locked" -Value 1
 
-$DNSOverHTTPS= Join-Path $FirefoxPolicyPath "DNSOverHTTPS"
+$DNSOverHTTPS= Join-Path $ThunderbirdPolicyPath "DNSOverHTTPS"
 New-Item -Path $DNSOverHTTPS -Force | Out-Null
-Set-FirefoxPolicy -Path $DNSOverHTTPS -Name "Enabled" -Value 1
-Set-FirefoxPolicy -Path $DNSOverHTTPS -Name "Locked" -Value 1
-Set-FirefoxPolicy -Path $DNSOverHTTPS -Name "ProviderURL" -Value "https://mozilla.cloudflare-dns.com/dns-query"
+Set-ThunderbirdPolicy -Path $DNSOverHTTPS -Name "Enabled" -Value 1
+Set-ThunderbirdPolicy -Path $DNSOverHTTPS -Name "Locked" -Value 1
+Set-ThunderbirdPolicy -Path $DNSOverHTTPS -Name "ProviderURL" -Value "https://mozilla.cloudflare-dns.com/dns-query"
 
-Set-FirefoxPolicy -Name "DisableChat" -Value 1
-Set-FirefoxPolicy -Name "DisableCommunity" -Value 1
-Set-FirefoxPolicy -Name "DisableMasterPasswordCreation" -Value 1
-Set-FirefoxPolicy -Name "DisableQRExport" -Value 1
-Set-FirefoxPolicy -Name "DisableTelemetry" -Value 1
-Set-FirefoxPolicy -Name "PasswordManagerEnabled" -Value 1
+Set-ThunderbirdPolicy -Name "DisableChat" -Value 1
+Set-ThunderbirdPolicy -Name "DisableCommunity" -Value 1
+Set-ThunderbirdPolicy -Name "DisableMasterPasswordCreation" -Value 1
+Set-ThunderbirdPolicy -Name "DisableQRExport" -Value 1
+Set-ThunderbirdPolicy -Name "DisableTelemetry" -Value 1
+Set-ThunderbirdPolicy -Name "PasswordManagerEnabled" -Value 1
 
-Set-FirefoxPolicy -Name "Preferences" -Value @'
+Set-ThunderbirdPolicy -Name "Preferences" -Value @'
 {
     "calendar.agenda.days": {
         "Status": "locked",
@@ -161,18 +170,18 @@ Set-FirefoxPolicy -Name "Preferences" -Value @'
 }
 '@
 
-$SearchEngines = Join-Path $FirefoxPolicyPath "SearchEngines"
+$SearchEngines = Join-Path $ThunderbirdPolicyPath "SearchEngines"
 $SearchEnginesAdd = Join-Path $SearchEngines "Add\1"
 New-Item -Path $SearchEnginesAdd -Force | Out-Null
-Set-FirefoxPolicy -Path $SearchEnginesAdd -Name "Name" -Value "DuckDuckGo"
-Set-FirefoxPolicy -Path $SearchEnginesAdd -Name "URLTemplate" -Value "https://duckduckgo.com/?q={searchTerms}"
-Set-FirefoxPolicy -Path $SearchEngines -Name "Default" -Value "DuckDuckGo"
-Set-FirefoxPolicy -Path $SearchEngines -Name "PreventInstalls" -Value 1
+Set-ThunderbirdPolicy -Path $SearchEnginesAdd -Name "Name" -Value "DuckDuckGo"
+Set-ThunderbirdPolicy -Path $SearchEnginesAdd -Name "URLTemplate" -Value "https://duckduckgo.com/?q={searchTerms}"
+Set-ThunderbirdPolicy -Path $SearchEngines -Name "Default" -Value "DuckDuckGo"
+Set-ThunderbirdPolicy -Path $SearchEngines -Name "PreventInstalls" -Value 1
 $SearchEnginesRemove = Join-Path $SearchEngines "Remove"
 New-Item -Path $SearchEnginesRemove -Force | Out-Null
-Set-FirefoxPolicy -Path $SearchEnginesRemove -Name "1" -Value "Bing"
-Set-FirefoxPolicy -Path $SearchEnginesRemove -Name "2" -Value "Perplexity"
-Set-FirefoxPolicy -Path $SearchEnginesRemove -Name "3" -Value "Wikipedia (en)"
+Set-ThunderbirdPolicy -Path $SearchEnginesRemove -Name "1" -Value "Bing"
+Set-ThunderbirdPolicy -Path $SearchEnginesRemove -Name "2" -Value "Perplexity"
+Set-ThunderbirdPolicy -Path $SearchEnginesRemove -Name "3" -Value "Wikipedia (en)"
 
 Write-Host "Thunderbird policies have been applied successfully." -ForegroundColor Green
 Write-Host "Restart Thunderbird, then check about:policies." -ForegroundColor Yellow

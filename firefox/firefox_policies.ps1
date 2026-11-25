@@ -1,4 +1,13 @@
 $ProgressPreference = "SilentlyContinue"
+
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+
+if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Script is not running with administrative privileges." -ForegroundColor Red
+    Write-Host "Please run PowerShell as Administrator." -ForegroundColor Yellow
+    return
+}
+
 $FirefoxInstallationPath = (Get-Item 'HKLM:\SOFTWARE\Mozilla\Firefox\TaskBarIDs').GetValueNames() | Select-Object -First 1
 
 $AutoconfigDestination = Join-Path $FirefoxInstallationPath 'defaults\pref\autoconfig.js'

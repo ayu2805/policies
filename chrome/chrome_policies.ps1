@@ -1,3 +1,11 @@
+$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+
+if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "Script is not running with administrative privileges." -ForegroundColor Red
+    Write-Host "Please run PowerShell as Administrator." -ForegroundColor Yellow
+    return
+}
+
 $ChromePolicyPath = "HKLM:\SOFTWARE\Policies\Google\Chrome"
 
 New-Item -Path $ChromePolicyPath -Force | Out-Null
