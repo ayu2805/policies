@@ -12,13 +12,13 @@ $FirefoxInstallationPath = (Get-Item 'HKLM:\SOFTWARE\Mozilla\Firefox\TaskBarIDs'
 
 $AutoconfigDestination = Join-Path $FirefoxInstallationPath 'defaults\pref\autoconfig.js'
 Invoke-WebRequest `
-    -Uri 'https://raw.githubusercontent.com/ayu2805/browser-policies/main/firefox_autoconfig.js' `
+    -Uri 'https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_autoconfig.js' `
     -OutFile $AutoconfigDestination `
     -ErrorAction Stop
 
 $PreferencesDestination = Join-Path $FirefoxInstallationPath 'firefox_pref.cfg'
 Invoke-WebRequest `
-    -Uri 'https://raw.githubusercontent.com/ayu2805/browser-policies/main/firefox_preferences.cfg' `
+    -Uri 'https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_preferences.cfg' `
     -OutFile $PreferencesDestination `
     -ErrorAction Stop
 
