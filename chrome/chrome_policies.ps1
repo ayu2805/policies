@@ -11,11 +11,17 @@ function Set-ChromePolicy {
         [object]$Value
     )
 
-    if ($Value -is [string]) {
-        $propertyType = 'String'
-    }
-    elseif ($Value -is [int]) {
+    if ($Value -is [int]) {
         $propertyType = 'DWord'
+    }
+    elseif ($Value -is [string]) {
+        try {
+            $null = $Value | ConvertFrom-Json -ErrorAction Stop
+            $propertyType = 'MultiString'
+        }
+        catch {
+            $propertyType = 'String'
+        }
     }
 
     New-ItemProperty `
@@ -29,16 +35,19 @@ function Set-ChromePolicy {
 
 Set-ChromePolicy -Name "AIModeSettings" -Value 1
 Set-ChromePolicy -Name "AutofillGenAiSettings" -Value 2
-Set-ChromePolicy -Name "AutofillSettings" -Value (ConvertTo-Json @(
-    @{
-        blocked_types = @("all")
-        url_pattern = "*"
-    }
-) -Compress)
+Set-ChromePolicy -Name "AutofillSettings" -Value @'
+{
+    "blocked_types": [
+        "all"
+    ],
+    "url_pattern": "*"
+}
+'@
 Set-ChromePolicy -Name "BackgroundModeEnabled" -Value 0
 Set-ChromePolicy -Name "BlockThirdPartyCookies" -Value 1
 Set-ChromePolicy -Name "ChromeSuggestionsSettings" -Value 1
-Set-ChromePolicy -Name "ClearBrowsingDataOnExitList" -Value (ConvertTo-Json @(
+Set-ChromePolicy -Name "ClearBrowsingDataOnExitList" -Value @'
+[
     "browsing_history",
     "download_history",
     "cached_images_and_files",
@@ -46,13 +55,16 @@ Set-ChromePolicy -Name "ClearBrowsingDataOnExitList" -Value (ConvertTo-Json @(
     "autofill",
     "site_settings",
     "hosted_app_data"
-) -Compress)
-Set-ChromePolicy -Name "CookiesAllowedForUrls" -Value (ConvertTo-Json @(
+]
+'@
+Set-ChromePolicy -Name "CookiesAllowedForUrls" -Value @'
+[
     "accounts.google.com",
     "github.com",
     "sso.crunchyroll.com",
     "web.whatsapp.com"
-) -Compress)
+]
+'@
 Set-ChromePolicy -Name "CreateThemesSettings" -Value 2
 Set-ChromePolicy -Name "DefaultAutomaticDownloadsSetting" -Value 1
 Set-ChromePolicy -Name "DefaultCookiesSetting" -Value 4
@@ -85,19 +97,23 @@ Set-ChromePolicy -Name "SafeBrowsingProtectionLevel" -Value 0
 Set-ChromePolicy -Name "SearchContentSharingSettings" -Value 1
 Set-ChromePolicy -Name "SearchSuggestEnabled" -Value 0
 Set-ChromePolicy -Name "SmartTabSharingSettings" -Value 1
-Set-ChromePolicy -Name "SyncTypesListDisabled" -Value (ConvertTo-Json @(
+Set-ChromePolicy -Name "SyncTypesListDisabled" -Value @'
+[
     "apps",
     "autofill",
     "bookmarks",
     "extensions",
     "preferences",
     "passwords",
+    "payments",
     "productComparison",
     "readingList",
     "tabs",
     "themes",
+    "typedUrls",
     "wifiConfigurations"
-) -Compress)
+]
+'@
 Set-ChromePolicy -Name "TabCompareSettings" -Value 2
 Set-ChromePolicy -Name "ThirdPartyAiChatSettings" -Value 1
 Set-ChromePolicy -Name "TryOnYouSettings" -Value 2

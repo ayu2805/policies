@@ -28,11 +28,17 @@ function Set-FirefoxPolicy {
         [object]$Value
     )
 
-    if ($Value -is [string]) {
-        $propertyType = 'String'
-    }
-    elseif ($Value -is [int]) {
+    if ($Value -is [int]) {
         $propertyType = 'DWord'
+    }
+    elseif ($Value -is [string]) {
+        try {
+            $null = $Value | ConvertFrom-Json -ErrorAction Stop
+            $propertyType = 'MultiString'
+        }
+        catch {
+            $propertyType = 'String'
+        }
     }
 
     New-ItemProperty `
