@@ -1,0 +1,137 @@
+{
+    "policies": {
+        "Cookies": {
+            "AcceptThirdParty": "never",
+            "Default": false,
+            "Locked": true
+        },
+        "DNSOverHTTPS": {
+            "Enabled": true,
+            "Locked": true,
+            "ProviderURL": "https://mozilla.cloudflare-dns.com/dns-query"
+        },
+        "DisableChat": true,
+        "DisableCommunity": true,
+        "DisableMasterPasswordCreation": false,
+        "DisableQRExport": true,
+        "DisableTelemetry": true,
+        "PasswordManagerEnabled": false,
+        "Preferences": {
+            "calendar.agenda.days": {
+                "Status": "locked",
+                "Value": 1
+            },
+            "calendar.date.format": {
+                "Status": "locked",
+                "Value": 1
+            },
+            "calendar.view-minimonth.showWeekNumber": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.view.dayendhour": {
+                "Status": "locked",
+                "Value": 24
+            },
+            "calendar.view.daystarthour": {
+                "Status": "locked",
+                "Value": 0
+            },
+            "calendar.view.visiblehours": {
+                "Status": "locked",
+                "Value": 24
+            },
+            "calendar.week.d0sundaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d1mondaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d2tuesdaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d3wednesdaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d4thursdaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d5fridaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "calendar.week.d6saturdaysoff": {
+                "Status": "locked",
+                "Value": false
+            },
+            "extensions.getAddons.showPane": {
+                "Status": "locked",
+                "Value": false
+            },
+            "general.autoScroll": {
+                "Status": "locked",
+                "Value": true
+            },
+            "mail.cloud_files.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "mail.collect_email_address_outgoing": {
+                "Status": "locked",
+                "Value": false
+            },
+            "mail.compose.autosaveinterval": {
+                "Status": "locked",
+                "Value": 1
+            },
+            "mail.enable_autocomplete": {
+                "Status": "locked",
+                "Value": false
+            },
+            "mail.threadpane.listview": {
+                "Status": "locked",
+                "Value": 1
+            },
+            "mail.uifontsize": {
+                "Status": "locked",
+                "Value": 12
+            },
+            "mailnews.default_view_flags": {
+                "Status": "locked",
+                "Value": 0
+            },
+            "mailnews.message_display.disable_remote_image": {
+                "Status": "locked",
+                "Value": false
+            },
+            "mailnews.start_page.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "places.history.enabled": {
+                "Status": "locked",
+                "Value": false
+            }
+        },
+        "SearchEngines": {
+            "Add": [
+                {
+                    "Name": "DuckDuckGo",
+                    "URLTemplate": "https://duckduckgo.com/?q={searchTerms}"
+                }
+            ],
+            "Default": "DuckDuckGo",
+            "PreventInstalls": true,
+            "Remove": [
+                "Bing",
+                "Perplexity",
+                "Wikipedia (en)"
+            ]
+        }
+    }
+}
