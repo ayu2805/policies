@@ -2,13 +2,13 @@
 
 sudo mkdir -p /etc/firefox/policies
 
-sudo curl -o /etc/firefox/policies/policies.json \
+sudo curl -sS -o /etc/firefox/policies/policies.json \
     https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_policies.json
 
-sudo curl -o /usr/lib/firefox/defaults/pref/autoconfig.js \
+sudo curl -sS -o /usr/lib/firefox/defaults/pref/autoconfig.js \
     https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_autoconfig.js
 
-sudo curl -o /usr/lib/firefox/firefox_pref.cfg \
+sudo curl -sS -o /usr/lib/firefox/firefox_pref.cfg \
     https://raw.githubusercontent.com/ayu2805/policies/main/firefox/firefox_preferences.cfg
 
 printf '\033[32m%s\033[0m\n' "Firefox policies have been applied successfully."
