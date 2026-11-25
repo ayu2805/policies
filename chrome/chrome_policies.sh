@@ -2,7 +2,7 @@
 
 sudo mkdir -p /etc/opt/chrome/policies/managed
 
-sudo curl -sS https://raw.githubusercontent.com/ayu2805/policies/main/chrome_policies.json \
+sudo curl -sS https://raw.githubusercontent.com/ayu2805/policies/main/chrome/chrome_policies.json \
 -o /etc/opt/chrome/policies/managed/policies.json
 
 
