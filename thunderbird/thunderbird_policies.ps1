@@ -143,9 +143,13 @@ Set-ThunderbirdPolicy -Name "Preferences" -Value @'
         "Status": "locked",
         "Value": false
     },
+    "mail.threadpane.cardsview.rowcount": {
+        "Status": "locked",
+        "Value": 2
+    },
     "mail.threadpane.listview": {
         "Status": "locked",
-        "Value": 1
+        "Value": 0
     },
     "mail.uifontsize": {
         "Status": "locked",
