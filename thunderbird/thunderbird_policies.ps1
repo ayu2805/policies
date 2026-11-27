@@ -8,8 +8,6 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
     return
 }
 
-$ThunderbirdInstallationPath = (Get-Item 'HKLM:\SOFTWARE\Mozilla\Thunderbird\TaskBarIDs').GetValueNames() | Select-Object -First 1
-
 $ThunderbirdPolicyPath = "HKLM:\SOFTWARE\Policies\Mozilla\Thunderbird"
 
 New-Item -Path $ThunderbirdPolicyPath -Force | Out-Null
