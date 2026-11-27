@@ -242,6 +242,7 @@ Set-FirefoxPolicy -Name "Preferences" -Value @'
         "Status": "locked",
         "Value": false
     }
+}
 '@
 
 $SearchEngines = Join-Path $FirefoxPolicyPath "SearchEngines"
