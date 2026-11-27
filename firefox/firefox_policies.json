@@ -10,6 +10,9 @@
                 "Value": "available"
             }
         },
+        "AutofillAddressEnabled": false,
+        "AutofillCreditCardEnabled": false,
+        "BrowserDataBackup": false,
         "ClearOnShutdown": {
             "BrowsingHistoryAndDownloads": true,
             "Cache": true,
@@ -29,13 +32,21 @@
             "BehaviorPrivateBrowsing": "reject-foreign",
             "Locked": true
         },
+        "DNSOverHTTPS": {
+            "Enabled": true,
+            "Locked": true,
+            "ProviderURL": "https://mozilla.cloudflare-dns.com/dns-query"
+        },
         "DisableFeedbackCommands": true,
         "DisableFirefoxStudies": true,
+        "DisableLaunchOnLogin": true,
         "DisableMasterPasswordCreation": true,
         "DisableProfileImport": true,
         "DisableRemoteImprovements": true,
+        "DisableSafeMode": true,
         "DisableSetDesktopBackground": true,
         "DisableTelemetry": true,
+        "DontCheckDefaultBrowser": true,
         "EnableTrackingProtection": {
             "Category": "strict",
             "Locked": true,
@@ -47,8 +58,125 @@
                 "private_browsing": true
             }
         },
+        "FirefoxHome": {
+            "Highlights": false,
+            "Locked": true,
+            "Search": false,
+            "SponsoredStories": false,
+            "SponsoredTopSites": false,
+            "Stories": false,
+            "TopSites": false,
+            "Widgets": {
+                "Enabled": false
+            }
+        },
+        "HttpsOnlyMode": "force_enabled",
         "NoDefaultBookmarks": true,
         "PasswordManagerEnabled": false,
+        "Permissions": {
+            "Location": {
+                "BlockNewRequests": true,
+                "Locked": true
+            },
+            "Notifications": {
+                "BlockNewRequests": true,
+                "Locked": true
+            }
+        },
+        "Preferences": {
+            "browser.formfill.enable": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.search.suggest.enabled.private": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.tabs.hoverPreview.showThumbnails": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.theme.native-theme": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.showSearchSuggestionsFirst": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.showSearchTerms.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.engines": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.history": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.openpage": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.quickactions": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.recentsearches": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.topsites": {
+                "Status": "locked",
+                "Value": false
+            },
+            "browser.urlbar.suggest.trending": {
+                "Status": "locked",
+                "Value": false
+            },
+            "extensions.getAddons.showPane": {
+                "Status": "locked",
+                "Value": false
+            },
+            "extensions.htmlaboutaddons.recommendations.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "general.autoScroll": {
+                "Status": "locked",
+                "Value": true
+            },
+            "privacy.globalprivacycontrol.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "privacy.userContext.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "sidebar.visibility": {
+                "Status": "locked",
+                "Value": "hide-launcher"
+            },
+            "signon.autofillForms": {
+                "Status": "locked",
+                "Value": false
+            },
+            "signon.firefoxRelay.feature": {
+                "Status": "locked",
+                "Value": "disabled"
+            },
+            "signon.generation.enabled": {
+                "Status": "locked",
+                "Value": false
+            },
+            "signon.management.page.breach-alerts.enabled": {
+                "Status": "locked",
+                "Value": false
+            }
+        },
         "SearchEngines": {
             "Add": [
                 {
@@ -64,13 +192,16 @@
                 "Wikipedia (en)"
             ]
         },
+        "SearchSuggestEnabled": false,
         "SkipTermsOfUse": true,
         "UserMessaging": {
             "ExtensionRecommendations": false,
             "FeatureRecommendations": false,
             "FirefoxLabs": false,
             "Locked": true,
-            "MoreFromMozilla": false
-        }
+            "MoreFromMozilla": false,
+            "SkipOnboarding": true
+        },
+        "VisualSearchEnabled": false
     }
 }
