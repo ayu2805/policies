@@ -8,124 +8,56 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
 
 $ChromePolicyPath = "HKLM:\SOFTWARE\Policies\Google\Chrome"
 
-New-Item -Path $ChromePolicyPath -Force | Out-Null
-
-function Set-ChromePolicy {
-    param (
-        [Parameter(Mandatory)]
-        [string]$Name,
-
-        [Parameter(Mandatory)]
-        [object]$Value
+function Import-JsonToRegistry {
+    param(
+        [Parameter(Mandatory)] [string] $JsonPath,
+        [Parameter(Mandatory)] [string] $RegistryPath
     )
 
-    if ($Value -is [int]) {
-        $propertyType = 'DWord'
-    }
-    elseif ($Value -is [string]) {
-        try {
-            $null = $Value | ConvertFrom-Json -ErrorAction Stop
-            $propertyType = 'MultiString'
+    $JsonObject = Get-Content -LiteralPath $JsonPath -Raw | ConvertFrom-Json
+
+    function Set-RegistryValue($KeyPath, $Name, $Value) {
+        if ($Value -is [System.Management.Automation.PSCustomObject]) {
+            Write-RegistryObject $Value (Join-Path $KeyPath $Name)
+            return
         }
-        catch {
-            $propertyType = 'String'
-        }
+
+        $Type = if ($Value -is [bool] -or $Value -is [int]) { 'DWord' }
+                elseif ($Value -is [string])                { 'String' }
+
+        if ($Value -is [bool]) { $Value = [int]$Value }
+
+        New-ItemProperty -Path $KeyPath -Name $Name -Value $Value -PropertyType $Type -Force | Out-Null
     }
 
-    New-ItemProperty `
-        -Path $ChromePolicyPath `
-        -Name $Name `
-        -PropertyType $propertyType `
-        -Value $Value `
-        -Force | Out-Null
+    function Write-RegistryObject($JsonObject, $KeyPath) {
+        New-Item -Path $KeyPath -Force | Out-Null
+
+        foreach ($property in $JsonObject.PSObject.Properties) {
+            $name  = $property.Name
+            $value = $property.Value
+
+            if ($value -is [array]) {
+                $arrayKeyPath = Join-Path $KeyPath $name
+                New-Item -Path $arrayKeyPath -Force | Out-Null
+
+                for ($i = 0; $i -lt $value.Count; $i++) {
+                    Set-RegistryValue $arrayKeyPath ([string]($i + 1)) $value[$i]
+                }
+            }
+            else {
+                Set-RegistryValue $KeyPath $name $value
+            }
+        }
+    }
+    Write-RegistryObject $JsonObject $RegistryPath
 }
 
-
-Set-ChromePolicy -Name "AIModeSettings" -Value 1
-Set-ChromePolicy -Name "AutofillGenAiSettings" -Value 2
-Set-ChromePolicy -Name "AutofillSettings" -Value @'
-{
-    "blocked_types": [
-        "all"
-    ],
-    "url_pattern": "*"
-}
-'@
-Set-ChromePolicy -Name "BackgroundModeEnabled" -Value 0
-Set-ChromePolicy -Name "BlockThirdPartyCookies" -Value 1
-Set-ChromePolicy -Name "ChromeSuggestionsSettings" -Value 1
-Set-ChromePolicy -Name "ClearBrowsingDataOnExitList" -Value @'
-[
-    "browsing_history",
-    "download_history",
-    "cached_images_and_files",
-    "password_signin",
-    "autofill",
-    "site_settings",
-    "hosted_app_data"
-]
-'@
-Set-ChromePolicy -Name "CookiesAllowedForUrls" -Value @'
-[
-    "accounts.google.com",
-    "github.com",
-    "sso.crunchyroll.com",
-    "web.whatsapp.com"
-]
-'@
-Set-ChromePolicy -Name "CreateThemesSettings" -Value 2
-Set-ChromePolicy -Name "DefaultAutomaticDownloadsSetting" -Value 1
-Set-ChromePolicy -Name "DefaultCookiesSetting" -Value 4
-Set-ChromePolicy -Name "DefaultGeolocationSetting" -Value 2
-Set-ChromePolicy -Name "DefaultIdleDetectionSetting" -Value 2
-Set-ChromePolicy -Name "DefaultNotificationsSetting" -Value 2
-Set-ChromePolicy -Name "DefaultSearchProviderEnabled" -Value 1
-Set-ChromePolicy -Name "DefaultSearchProviderName" -Value "DuckDuckGo"
-Set-ChromePolicy -Name "DefaultSearchProviderSearchURL" -Value "https://duckduckgo.com/?q={searchTerms}"
-Set-ChromePolicy -Name "DevToolsGenAiSettings" -Value 2
-Set-ChromePolicy -Name "DnsOverHttpsMode" -Value "secure"
-Set-ChromePolicy -Name "DnsOverHttpsTemplates" -Value "https://cloudflare-dns.com/dns-query"
-Set-ChromePolicy -Name "GeminiActOnWebSettings" -Value 1
-Set-ChromePolicy -Name "GeminiSettings" -Value 1
-Set-ChromePolicy -Name "GeminiSparkSettings" -Value 1
-Set-ChromePolicy -Name "GenAILocalFoundationalModelSettings" -Value 1
-Set-ChromePolicy -Name "HelpMeWriteSettings" -Value 2
-Set-ChromePolicy -Name "HighEfficiencyModeEnabled" -Value 0
-Set-ChromePolicy -Name "HistorySearchSettings" -Value 2
-Set-ChromePolicy -Name "HomepageLocation" -Value "chrome://new-tab-page"
-Set-ChromePolicy -Name "HttpsOnlyMode" -Value "force_balanced_enabled"
-Set-ChromePolicy -Name "NTPCardsVisible" -Value 0
-Set-ChromePolicy -Name "NewTabPageLocation" -Value "chrome://new-tab-page"
-Set-ChromePolicy -Name "PasswordLeakDetectionEnabled" -Value 0
-Set-ChromePolicy -Name "PasswordManagerEnabled" -Value 0
-Set-ChromePolicy -Name "PaymentMethodQueryEnabled" -Value 0
-Set-ChromePolicy -Name "PromotionsEnabled" -Value 0
-Set-ChromePolicy -Name "RestoreOnStartup" -Value 5
-Set-ChromePolicy -Name "SafeBrowsingProtectionLevel" -Value 0
-Set-ChromePolicy -Name "SearchContentSharingSettings" -Value 1
-Set-ChromePolicy -Name "SearchSuggestEnabled" -Value 0
-Set-ChromePolicy -Name "SmartTabSharingSettings" -Value 1
-Set-ChromePolicy -Name "SyncTypesListDisabled" -Value @'
-[
-    "apps",
-    "autofill",
-    "bookmarks",
-    "extensions",
-    "preferences",
-    "passwords",
-    "payments",
-    "productComparison",
-    "readingList",
-    "tabs",
-    "themes",
-    "typedUrls",
-    "wifiConfigurations"
-]
-'@
-Set-ChromePolicy -Name "TabCompareSettings" -Value 2
-Set-ChromePolicy -Name "ThirdPartyAiChatSettings" -Value 1
-Set-ChromePolicy -Name "TryOnYouSettings" -Value 2
-Set-ChromePolicy -Name "VoiceTypingSettings" -Value 2
+Invoke-WebRequest `
+    -Uri 'https://raw.githubusercontent.com/ayu2805/policies/main/chrome/chrome_policies.json' `
+    -OutFile "$env:TEMP\chrome_policies.json" `
+    -ErrorAction Stop
+Import-JsonToRegistry -JsonPath "$env:TEMP\chrome_policies.json" -RegistryPath $ChromePolicyPath
 
 Write-Host "Chrome policies have been applied successfully." -ForegroundColor Green
 Write-Host "Restart Chrome, then check chrome://policy." -ForegroundColor Yellow
